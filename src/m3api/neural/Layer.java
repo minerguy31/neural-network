@@ -1,8 +1,11 @@
 package m3api.neural;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Layer {
+	public static Random rnd = new Random();
+	
 	final ArrayList<Neuron> neurons = new ArrayList<>();
 	private Layer childlayer;
 	
@@ -27,5 +30,16 @@ public class Layer {
 			return childlayer;
 		else
 			throw new RuntimeException("No child layer set!");
+	}
+	
+	public Neuron getRandom() {
+		int r = rnd.nextInt(neurons.size());
+		return neurons.get(r);
+	}
+	
+	public void populate(Layer after) {
+		for(int i = 0; i < after.neurons.size(); i++) {
+			this.neurons.get(i).tofire.add(after.getRandom());
+		}
 	}
 }

@@ -36,4 +36,10 @@ public class ResultLayer extends Layer {
 			n.reset();
 		}
 	}
+	
+	@Override
+	public Neuron getRandom() {
+		int r = rnd.nextInt(neurons.size());
+		return neurons.get(r);
+	}
 }
