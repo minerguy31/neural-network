@@ -16,11 +16,11 @@ public class ResultLayer extends Layer {
 		neurons.add((ResultNeuron) n);
 	}
 	
-	public HashMap<String, Boolean> getResults() {
-		HashMap<String, Boolean> ret = new HashMap<>();
+	public HashMap<String, Double> getResults() {
+		HashMap<String, Double> ret = new HashMap<>();
 		
 		for(ResultNeuron rn : neurons) {
-			ret.put(rn.desc, rn.isFired());
+			ret.put(rn.desc, rn.triggered());
 			rn.reset();
 		}
 		
@@ -29,12 +29,6 @@ public class ResultLayer extends Layer {
 
 	public void addNeuron(String resultname) {
 		addNeuron(new ResultNeuron(this, resultname));
-	}
-	
-	public void reset() {
-		for(ResultNeuron n : neurons) {
-			n.reset();
-		}
 	}
 	
 	@Override

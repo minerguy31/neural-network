@@ -37,9 +37,16 @@ public class Layer {
 		return neurons.get(r);
 	}
 	
-	public void populate(Layer after) {
+	public void populate(Layer after, double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
 		for(int i = 0; i < after.neurons.size(); i++) {
-			this.neurons.get(i).tofire.add(after.getRandom());
+			Neuron n = this.neurons.get(i);
+			n.tofire.add(after.getRandom());
+			n.populate(weightMin, weightMax, thresholdMin, thresholdMax);
 		}
+	}
+	
+	public void reset() {
+		for(Neuron n : neurons)
+			n.reset();
 	}
 }

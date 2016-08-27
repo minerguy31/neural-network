@@ -3,7 +3,6 @@ package m3api.neural;
 public class ResultNeuron extends Neuron {
 	ResultLayer parentlayer;
 	String desc;
-	private boolean fired = false;
 	
 	public ResultNeuron(ResultLayer l, String desc) {
 		parentlayer = l;
@@ -11,15 +10,11 @@ public class ResultNeuron extends Neuron {
 	}
 	
 	@Override
-	public void fire() {
-		fired = true;
-	}
-
-	public void reset() {
-		fired = false;
+	public void fire(double d) {
+		triggered += d;
 	}
 	
-	public boolean isFired() {
-		return fired;
+	public double triggered() {
+		return triggered;
 	}
 }

@@ -6,28 +6,23 @@ public class InputNeuron extends Neuron {
 	public final ArrayList<Neuron> tofire = new ArrayList<>();
 	InputLayer parentlayer;
 	String desc;
-	private boolean fired = false;
 	
 	public InputNeuron(InputLayer l, String desc) {
 		parentlayer = l;
 		this.desc = desc;
 	}
 	
-	public boolean isFired() {
-		return fired;
+	public double triggered() {
+		return triggered;
 	}
 	
-	public void setFired(boolean fire) {
-		this.fired = fire;
-	}
-	
-	public void reset() {
-		setFired(false);
+	public void setTriggered(double fire) {
+		this.triggered = fire;
 	}
 
-	@Override
 	public void fire() {
-		for(Neuron n : tofire)
-			n.fire();
+		if(triggered != 0.0)
+			for(Neuron n : tofire)
+				n.fire(triggered);
 	}
 }

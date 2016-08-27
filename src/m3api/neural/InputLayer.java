@@ -20,13 +20,6 @@ public class InputLayer extends Layer {
 	
 	public void fire() {
 		for(InputNeuron n : neurons)
-			if(n.isFired())
-				n.fire();
-	}
-	
-	public void reset() {
-		for(InputNeuron n : neurons) {
-			n.reset();
-		}
+			n.fire();
 	}
 }

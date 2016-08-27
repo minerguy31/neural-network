@@ -10,6 +10,11 @@ public class Network {
 	InputLayer input = new InputLayer();
 	ArrayList<Layer> layers = new ArrayList<>();
 	ResultLayer result = new ResultLayer();
+	int outgoing = 8;
+	
+	public void setOutgoing(int i) {
+		outgoing = i;
+	}
 	
 	public void addInput(String inputname) {
 		input.addNeuron(inputname);
@@ -19,10 +24,17 @@ public class Network {
 		result.addNeuron(resultname);
 	}
 		
-	public HashMap<String, Boolean> run() {
+	public HashMap<String, Double> run() {
 		input.fire();
-		HashMap<String, Boolean> ret = result.getResults();
+		HashMap<String, Double> ret = result.getResults();
+		for(Layer l : layers) {
+			for(Neuron w : l.neurons) {
+				System.out.print(w.triggered + " ");
+			}
+			System.out.println();
+		}
 		reset();
+		
 		return ret;
 	}
 	
@@ -35,20 +47,25 @@ public class Network {
 	public void reset() {
 		input.reset();
 		result.reset();
+		for(Layer l : layers)
+			l.reset();
 	}
 	
-	public void populate() {
+	public void populate(double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
 		for(InputNeuron in : input.neurons) {	//Map from input layer to hidden layer 0
-			in.tofire.add(layers.get(0).getRandom());
+			for(int n = 0; n < outgoing; n++)
+				in.tofire.add(layers.get(0).getRandom());
 		}
 		
 		for (int i = 0; i < layers.size() - 1; i++) {	//Map hidden layers
 			Layer l = layers.get(i);
-			l.populate(layers.get(i + 1));
+			for(int n = 0; n < outgoing; n++)
+				l.populate(layers.get(i + 1),weightMin, weightMax, thresholdMin, thresholdMax);
 		}
 		
 		for(Neuron n : layers.get(layers.size() - 1).neurons) {	//Map last hidden layer to output
-			n.tofire.add(result.getRandom());
+			for(int i = 0; i < outgoing; i++)
+				n.tofire.add(result.getRandom());
 		}
 	}
 }
