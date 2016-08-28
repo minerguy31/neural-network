@@ -14,6 +14,8 @@ public class Network {
 	ResultLayer result = new ResultLayer();
 	int outgoing = 8;
 	
+	public Network() { }
+	
 	public void setOutgoing(int i) {
 		outgoing = i;
 	}
@@ -85,5 +87,12 @@ public class Network {
 			for(int i = 0; i < outgoing; i++)
 				n.tofire.add(result.getRandom());
 		}
+	}
+	
+	public void mutate(double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
+		if(rnd.nextInt(layers.size()) > 0)
+			layers.get(rnd.nextInt(layers.size())).mutate(weightMin, weightMax, thresholdMin, thresholdMax);
+		else
+			input.mutate(weightMin, weightMax, thresholdMin, thresholdMax);
 	}
 }

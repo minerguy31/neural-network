@@ -2,12 +2,13 @@ package m3api.neural.learning;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.function.BiFunction;
 
 import m3api.neural.Network;
 
 public class Learner {
-	BiFunction<HashMap<String, Double>, HashMap<String, Double>, Integer> fitnessfunc;
+	BiFunction<HashMap<String, Double>, HashMap<String, Double>, Double> fitnessfunc;
 	ArrayList<Network> genomes = new ArrayList<>();
 	int genomecnt = 0;
 	double mutation_weightMin; 
@@ -22,8 +23,8 @@ public class Learner {
 	HashMap<String, Double> input = new HashMap<>();
 	ArrayList<String> result = new ArrayList<>();
 	
-	public Learner(BiFunction<HashMap<String, Double>, HashMap<String, Double>, Integer> fitness) {
-		fitnessfunc = fitness;
+	public Learner(BiFunction<HashMap<String, Double>, HashMap<String, Double>, Double> biFunction) {
+		fitnessfunc = biFunction;
 	}
 
 	public Learner setGenomesPerGeneration(int i) {
@@ -77,11 +78,28 @@ public class Learner {
 	
 	public void run() {
 		HashMap<Network,Double> nets = new HashMap<>();
+		double scoretotal = 0d;
 		for(Network n : genomes) {
 			HashMap<String, Double> result = n.run();
 			n.reset();
 			double score = fitnessfunc.apply(input, result);
+			scoretotal += score;
 			nets.put(n, score);
+		}
+		
+		// Generate offspring
+		ArrayList<Network> offspring = new ArrayList<>();
+		
+		for(Entry<Network, Double> e : nets.entrySet()) {
+			int ct = (int) (e.getValue() / scoretotal * genomecnt);
+			Network n = e.getKey();
+			
+			for(int i = 0; i < ct; i++) {
+				//TODO: Find a way to deep copy the network so mutate can be called multiple times on it
+				
+				n.mutate(mutation_weightMin, mutation_weightMax, mutation_thresholdMin, mutation_thresholdMax);
+				offspring.add(n);
+			}
 		}
 	}
 }

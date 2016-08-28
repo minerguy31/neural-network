@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Neuron {
 	public static Random r = new Random();
-	public final ArrayList<Neuron> tofire = new ArrayList<>();
+	public ArrayList<Neuron> tofire = new ArrayList<>();
 	
 	public double weight = 1;
 	public double triggered = 0;
@@ -40,5 +40,12 @@ public class Neuron {
 	public void mutateConnections(Neuron randomneuron) {
 		tofire.remove(r.nextInt(tofire.size()));
 		tofire.add(randomneuron);
+	}
+	
+	public void mutate(double weightMin, double weightMax, double thresholdMin, double thresholdMax, Neuron randomneuron) {
+		if(r.nextBoolean())
+			mutateValues(weightMin, weightMax, thresholdMin, thresholdMax);
+		else
+			mutateConnections(randomneuron);
 	}
 }

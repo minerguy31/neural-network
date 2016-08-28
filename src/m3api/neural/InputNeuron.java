@@ -1,9 +1,6 @@
 package m3api.neural;
 
-import java.util.ArrayList;
-
 public class InputNeuron extends Neuron {
-	public final ArrayList<Neuron> tofire = new ArrayList<>();
 	InputLayer parentlayer;
 	String desc;
 	

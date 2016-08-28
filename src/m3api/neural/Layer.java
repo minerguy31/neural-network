@@ -49,4 +49,10 @@ public class Layer {
 		for(Neuron n : neurons)
 			n.reset();
 	}
+	
+	public void mutate(double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
+		int index = rnd.nextInt(neurons.size());
+		neurons.get(index).mutate(weightMin, weightMax, thresholdMin, thresholdMax, 
+				neurons.get(rnd.nextInt(neurons.size())));
+	}
 }
