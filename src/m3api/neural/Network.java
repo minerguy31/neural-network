@@ -2,6 +2,7 @@ package m3api.neural;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 
 public class Network {
@@ -23,6 +24,15 @@ public class Network {
 	public void addResult(String resultname) {
 		result.addNeuron(resultname);
 	}
+	
+	public void setInputs(HashMap<String, Double> inputs) {
+		for(Entry<String, Double> n : inputs.entrySet()) {
+			for(InputNeuron w : input.neurons)
+				if(w.desc.equals(n.getKey())) {
+					w.setTriggered(n.getValue());
+				}
+		}
+	}
 		
 	public HashMap<String, Double> run() {
 		input.fire();
@@ -39,6 +49,8 @@ public class Network {
 	}
 	
 	public void addLayers(int neurons, int layers) {
+		this.layers.clear();
+		
 		for(int i = 0; i < layers; i++) {
 			this.layers.add(new Layer(neurons));
 		}
