@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 public class Network {
 	public static Random rnd = new Random();
@@ -19,6 +20,11 @@ public class Network {
 	
 	public void addInput(String inputname) {
 		input.addNeuron(inputname);
+	}
+	
+	public void addInputs(Set<String> inputnames) {
+		for(String inputname : inputnames)
+			input.addNeuron(inputname);
 	}
 	
 	public void addResult(String resultname) {
