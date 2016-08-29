@@ -1,6 +1,5 @@
 package m3api.neural;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ResultLayer extends Layer {
@@ -33,5 +32,16 @@ public class ResultLayer extends Layer {
 	public Neuron getRandom() {
 		int r = rnd.nextInt(neurons.size());
 		return neurons.get(r);
+	}
+	
+	public ResultLayer getClone() {
+		
+		ResultLayer ret = new ResultLayer();
+		
+		for(Neuron n : neurons) {
+			ret.neurons.add(((ResultNeuron) n).getClone(childlayer, ret));
+		}
+		
+		return ret;
 	}
 }

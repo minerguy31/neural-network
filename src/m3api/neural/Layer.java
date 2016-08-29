@@ -6,7 +6,7 @@ import java.util.Random;
 public class Layer {
 	public static Random rnd = new Random();
 	
-	final ArrayList<Neuron> neurons = new ArrayList<>();
+	ArrayList<Neuron> neurons = new ArrayList<>();
 	protected Layer childlayer;
 	
 	protected Layer() {}
@@ -54,5 +54,17 @@ public class Layer {
 		int index = rnd.nextInt(neurons.size());
 		neurons.get(index).mutate(weightMin, weightMax, thresholdMin, thresholdMax, 
 				neurons.get(rnd.nextInt(neurons.size())));
+	}
+	
+	public Layer getClone(Layer childlayer) {
+		Layer ret = new Layer();
+		
+		for(Neuron n : neurons) {
+			ret.neurons.add(n.getClone(childlayer));
+		}
+		
+		ret.childlayer = childlayer;
+		
+		return ret;
 	}
 }

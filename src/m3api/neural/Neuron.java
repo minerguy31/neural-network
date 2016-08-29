@@ -57,4 +57,14 @@ public class Neuron {
 		
 		mutateValues(i, weightMin, weightMax, thresholdMin, thresholdMax);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Neuron getClone(Layer nextlayer) {
+		Neuron ret = new Neuron(nextlayer);
+		
+		ret.weights = ((ArrayList<Double>) weights.clone());
+		ret.threshold = this.threshold;
+		
+		return ret;
+	}
 }

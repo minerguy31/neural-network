@@ -92,4 +92,26 @@ public class Network {
 		else
 			input.mutate(weightMin, weightMax, thresholdMin, thresholdMax);
 	}
+	
+	public Network getClone() {
+		Network ret = new Network();
+		
+		Layer last = ret.result = this.result.getClone();
+		
+		for(int i = layers.size() - 1; i >= 0; i--) {
+			Layer l = layers.get(i);
+			Layer clone = l.getClone(last);
+			ret.layers.add(clone);
+			last = clone;
+		}
+		
+		Collections.reverse(ret.layers);
+		
+		Layer r = this.input.getClone(last);
+		
+		ret.input.neurons = r.neurons;
+		ret.input.childlayer = r.childlayer;
+		
+		return ret;
+	}
 }

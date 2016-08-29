@@ -1,7 +1,5 @@
 package m3api.neural;
 
-import java.util.ArrayList;
-
 public class InputNeuron extends Neuron {
 	String desc;
 	
@@ -25,7 +23,15 @@ public class InputNeuron extends Neuron {
 				n.fire(weights.get(i));
 			}
 		System.out.println(this.weights);
+	}
+	
+	public InputNeuron getClone(Layer nextlayer) {
+		InputNeuron ret = new InputNeuron(nextlayer, desc);
 		
+		Neuron n = super.getClone(nextlayer);
 		
+		ret.weights = n.weights;
+		
+		return ret;
 	}
 }
