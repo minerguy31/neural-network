@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 public class Network {
 	public static Random rnd = new Random();
@@ -13,12 +14,19 @@ public class Network {
 	ResultLayer result = new ResultLayer();
 	int outgoing = 8;
 	
+	public Network() { }
+	
 	public void setOutgoing(int i) {
 		outgoing = i;
 	}
 	
 	public void addInput(String inputname) {
 		input.addNeuron(inputname);
+	}
+	
+	public void addInputs(Set<String> inputnames) {
+		for(String inputname : inputnames)
+			input.addNeuron(inputname);
 	}
 	
 	public void addResult(String resultname) {
@@ -79,5 +87,12 @@ public class Network {
 			for(int i = 0; i < outgoing; i++)
 				n.tofire.add(result.getRandom());
 		}
+	}
+	
+	public void mutate(double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
+		if(rnd.nextInt(layers.size()) > 0)
+			layers.get(rnd.nextInt(layers.size())).mutate(weightMin, weightMax, thresholdMin, thresholdMax);
+		else
+			input.mutate(weightMin, weightMax, thresholdMin, thresholdMax);
 	}
 }
