@@ -1,10 +1,6 @@
 package m3api.neural;
 
-import java.util.ArrayList;
-
 public class InputLayer extends Layer {
-
-	ArrayList<InputNeuron>neurons = new ArrayList<>();
 	
 	@Override
 	public void addNeuron(Neuron n) {
@@ -15,11 +11,12 @@ public class InputLayer extends Layer {
 	}
 	
 	public void addNeuron(String s) {
-		addNeuron(new InputNeuron(this, s));
+		InputNeuron n = new InputNeuron(childlayer, s);
+		addNeuron(n);
 	}
 	
 	public void fire() {
-		for(InputNeuron n : neurons)
-			n.fire();
+		for(Neuron n : neurons)
+			((InputNeuron) n).fire();
 	}
 }

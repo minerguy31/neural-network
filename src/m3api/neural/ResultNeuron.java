@@ -1,11 +1,10 @@
 package m3api.neural;
 
 public class ResultNeuron extends Neuron {
-	ResultLayer parentlayer;
 	String desc;
 	
 	public ResultNeuron(ResultLayer l, String desc) {
-		parentlayer = l;
+		super(l);
 		this.desc = desc;
 	}
 	

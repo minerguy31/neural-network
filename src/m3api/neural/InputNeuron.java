@@ -1,11 +1,12 @@
 package m3api.neural;
 
+import java.util.ArrayList;
+
 public class InputNeuron extends Neuron {
-	InputLayer parentlayer;
 	String desc;
 	
-	public InputNeuron(InputLayer l, String desc) {
-		parentlayer = l;
+	public InputNeuron(Layer l, String desc) {
+		super(l);
 		this.desc = desc;
 	}
 	
@@ -19,7 +20,12 @@ public class InputNeuron extends Neuron {
 
 	public void fire() {
 		if(triggered != 0.0)
-			for(Neuron n : tofire)
-				n.fire(triggered);
+			for (int i = 0; i < nextlayer.neurons.size(); i++) {
+				Neuron n = nextlayer.neurons.get(i);
+				n.fire(weights.get(i));
+			}
+		System.out.println(this.weights);
+		
+		
 	}
 }

@@ -7,13 +7,14 @@ public class Layer {
 	public static Random rnd = new Random();
 	
 	final ArrayList<Neuron> neurons = new ArrayList<>();
-	private Layer childlayer;
+	protected Layer childlayer;
 	
 	protected Layer() {}
 	
-	public Layer(int neurons) {
+	public Layer(int neurons, Layer l) {
+		setChildLayer(l);
 		for(int i = 0; i < neurons; i++) {
-			this.neurons.add(new Neuron());
+			this.neurons.add(new Neuron(childlayer));
 		}
 	}
 	
@@ -37,11 +38,10 @@ public class Layer {
 		return neurons.get(r);
 	}
 	
-	public void populate(Layer after, double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
-		for(int i = 0; i < after.neurons.size(); i++) {
+	public void populate(int nlay, double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
+		for(int i = 0; i < this.neurons.size(); i++) {
 			Neuron n = this.neurons.get(i);
-			n.tofire.add(after.getRandom());
-			n.populate(weightMin, weightMax, thresholdMin, thresholdMax);
+			n.populate(nlay, weightMin, weightMax, thresholdMin, thresholdMax);
 		}
 	}
 	

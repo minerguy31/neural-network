@@ -1,6 +1,7 @@
 package m3api.neural;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -12,13 +13,8 @@ public class Network {
 	InputLayer input = new InputLayer();
 	ArrayList<Layer> layers = new ArrayList<>();
 	ResultLayer result = new ResultLayer();
-	int outgoing = 8;
 	
 	public Network() { }
-	
-	public void setOutgoing(int i) {
-		outgoing = i;
-	}
 	
 	public void addInput(String inputname) {
 		input.addNeuron(inputname);
@@ -26,7 +22,7 @@ public class Network {
 	
 	public void addInputs(Set<String> inputnames) {
 		for(String inputname : inputnames)
-			input.addNeuron(inputname);
+			addInput(inputname);
 	}
 	
 	public void addResult(String resultname) {
@@ -35,9 +31,9 @@ public class Network {
 	
 	public void setInputs(HashMap<String, Double> inputs) {
 		for(Entry<String, Double> n : inputs.entrySet()) {
-			for(InputNeuron w : input.neurons)
-				if(w.desc.equals(n.getKey())) {
-					w.setTriggered(n.getValue());
+			for(Neuron w : input.neurons)
+				if(((InputNeuron) w).desc.equals(n.getKey())) {
+					((InputNeuron) w).setTriggered(n.getValue());
 				}
 		}
 	}
@@ -58,10 +54,17 @@ public class Network {
 	
 	public void addLayers(int neurons, int layers) {
 		this.layers.clear();
-		
-		for(int i = 0; i < layers; i++) {
-			this.layers.add(new Layer(neurons));
+		Layer n = this.result;
+		System.out.println(n.neurons);
+		for(int i = layers - 1; i >= 0; i--) {
+			Layer k = new Layer(neurons, n);
+			this.layers.add(k);	
+			n = k;
 		}
+		
+		Collections.reverse(this.layers);
+		
+		input.setChildLayer(this.layers.get(0));
 	}
 	
 	public void reset() {
@@ -72,21 +75,15 @@ public class Network {
 	}
 	
 	public void populate(double weightMin, double weightMax, double thresholdMin, double thresholdMax) {
-		for(InputNeuron in : input.neurons) {	//Map from input layer to hidden layer 0
-			for(int n = 0; n < outgoing; n++)
-				in.tofire.add(layers.get(0).getRandom());
-		}
+		int width = layers.get(0).neurons.size();
+		input.populate(width, weightMin, weightMax, thresholdMin, thresholdMax);	//Map input layer to first hidden layer
 		
 		for (int i = 0; i < layers.size() - 1; i++) {	//Map hidden layers
 			Layer l = layers.get(i);
-			for(int n = 0; n < outgoing; n++)
-				l.populate(layers.get(i + 1),weightMin, weightMax, thresholdMin, thresholdMax);
+			l.populate(width, weightMin, weightMax, thresholdMin, thresholdMax);
 		}
 		
-		for(Neuron n : layers.get(layers.size() - 1).neurons) {	//Map last hidden layer to output
-			for(int i = 0; i < outgoing; i++)
-				n.tofire.add(result.getRandom());
-		}
+		layers.get(layers.size() - 1).populate(result.neurons.size(), weightMin, weightMax, thresholdMin, thresholdMax);	//Map last hidden layer to output
 	}
 	
 	public void mutate(double weightMin, double weightMax, double thresholdMin, double thresholdMax) {

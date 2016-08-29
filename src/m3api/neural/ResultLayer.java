@@ -5,9 +5,6 @@ import java.util.HashMap;
 
 public class ResultLayer extends Layer {
 	
-
-	ArrayList<ResultNeuron>neurons = new ArrayList<>();
-	
 	@Override
 	public void addNeuron(Neuron n) {
 		if(!(n instanceof ResultNeuron))
@@ -19,7 +16,8 @@ public class ResultLayer extends Layer {
 	public HashMap<String, Double> getResults() {
 		HashMap<String, Double> ret = new HashMap<>();
 		
-		for(ResultNeuron rn : neurons) {
+		for(Neuron n : neurons) {
+			ResultNeuron rn = (ResultNeuron) n;
 			ret.put(rn.desc, rn.triggered());
 			rn.reset();
 		}
